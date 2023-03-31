@@ -13,6 +13,7 @@
     "@types/node": "18.15.11",
     "@types/react": "18.0.31",
     "@types/react-dom": "18.0.11",
+    "cookie-signature": "^1.2.1",
     "eslint": "8.37.0",
     "eslint-config-next": "13.2.4",
     "ioredis": "^5.3.1",
@@ -21,5 +22,8 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "typescript": "5.0.3"
+  },
+  "devDependencies": {
+    "@types/cookie-signature": "^1.1.0"
   }
 }

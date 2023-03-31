@@ -3,6 +3,8 @@ import { SessionData, SessionRecord } from 'next-session/lib/types';
 import { Redis } from 'ioredis';
 import { redis } from './redis';
 
+const getSessionId = (sid: string) => `sess:${sid}`;
+
 /**
  * @see https://github.com/hoangvvo/next-session/blob/master/src/memory-store.ts
  */
@@ -16,8 +18,7 @@ export class RedisStore implements SessionStore {
   async get(
     sid: string
   ): Promise<SessionData<SessionRecord> | null | undefined> {
-    const sess = await this.store.get(sid);
-    if (!sess) console.log('No session');
+    const sess = await this.store.get(getSessionId(sid));
     if (sess) {
       const session = JSON.parse(sess, (key, value) => {
         if (key === 'expires') return new Date(value);
@@ -36,14 +37,17 @@ export class RedisStore implements SessionStore {
   }
 
   async set(sid: string, session: SessionData<SessionRecord>): Promise<void> {
-    this.store.set(sid, JSON.stringify(session)) as unknown as Promise<void>;
+    this.store.set(
+      getSessionId(sid),
+      JSON.stringify(session)
+    ) as unknown as Promise<void>;
   }
 
   async destroy(sid: string): Promise<void> {
-    this.store.del(sid) as unknown as Promise<void>;
+    this.store.del(getSessionId(sid)) as unknown as Promise<void>;
   }
 
   async touch(sid: string, sess: SessionData): Promise<void> {
-    this.store.set(sid, JSON.stringify(sess));
+    this.store.set(getSessionId(sid), JSON.stringify(sess));
   }
 }
